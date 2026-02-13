@@ -1,18 +1,16 @@
 import { NextResponse } from "next/server";
 import { answerQuizBodySchema } from "@/lib/api-schemas";
-import { championIconUrl, fetchChampionsForVersion } from "@/lib/ddragon";
+import { fetchChampionsForVersion, type ChampionCacheRow } from "@/lib/ddragon";
 import {
-  championReason,
+  chooseNextQuestion,
   createEmptyScores,
   getQuestionById,
   mergeScores,
-  pickChampion,
-  pickNextQuestion,
   sanitizeScores,
   toPublicQuestion,
   TOTAL_QUESTIONS,
-  type ChampionCacheRow,
-} from "@/lib/quiz-engine";
+} from "@/lib/scoring";
+import { computeResult } from "@/lib/archetypes";
 import { getSupabaseAdmin } from "@/lib/supabase-admin";
 
 async function getChampions(version: string): Promise<ChampionCacheRow[]> {
@@ -84,11 +82,7 @@ export async function POST(request: Request) {
 
     if (answersCount >= TOTAL_QUESTIONS) {
       const champions = await getChampions(session.ddragon_version);
-      const champion = pickChampion(champions, nextScores);
-
-      if (!champion) {
-        return NextResponse.json({ error: "Champion pool unavailable" }, { status: 500 });
-      }
+      const result = computeResult(nextScores, champions, session.ddragon_version);
 
       const { error: updateError } = await supabase
         .schema("lol_quiz")
@@ -99,7 +93,7 @@ export async function POST(request: Request) {
           answers_count: answersCount,
           current_question_id: null,
           completed: true,
-          result_champion_id: champion.champion_id,
+          result_champion_id: result.mainChampion.id,
         })
         .eq("id", session.id);
 
@@ -112,18 +106,16 @@ export async function POST(request: Request) {
         sessionId: session.id,
         progress: { answered: answersCount, total: TOTAL_QUESTIONS },
         result: {
-          championId: champion.champion_id,
-          name: champion.payload.name,
-          title: champion.payload.title,
-          blurb: champion.payload.blurb ?? "",
-          version: champion.version,
-          imageUrl: championIconUrl(champion.version, champion.champion_id),
-          reason: championReason(champion.payload.name, nextScores),
+          version: session.ddragon_version,
+          ...result,
         },
       });
     }
 
-    const nextQuestion = pickNextQuestion(askedQuestionIds, nextScores);
+    const nextQuestion = chooseNextQuestion({
+      asked: askedQuestionIds,
+      scores: nextScores,
+    });
     if (!nextQuestion) {
       return NextResponse.json({ error: "No next question available" }, { status: 500 });
     }

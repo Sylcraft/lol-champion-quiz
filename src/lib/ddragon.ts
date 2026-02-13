@@ -14,6 +14,13 @@ const championsResponseSchema = z.object({
   data: z.record(z.string(), championSchema),
 });
 
+export type ChampionPayload = z.infer<typeof championSchema>;
+export type ChampionCacheRow = {
+  champion_id: string;
+  version: string;
+  payload: ChampionPayload;
+};
+
 export async function fetchLatestDDragonVersion(): Promise<string> {
   const response = await fetch("https://ddragon.leagueoflegends.com/api/versions.json", {
     cache: "no-store",
@@ -46,7 +53,7 @@ export async function fetchChampionsForVersion(version: string) {
     throw new Error("Unexpected Data Dragon champions payload");
   }
 
-  return Object.values(parsed.data.data).map((champion) => ({
+  return Object.values(parsed.data.data).map((champion): ChampionCacheRow => ({
     champion_id: champion.id,
     version,
     payload: champion,

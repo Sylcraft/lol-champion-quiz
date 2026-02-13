@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { startQuizBodySchema } from "@/lib/api-schemas";
 import { fetchChampionsForVersion, fetchLatestDDragonVersion } from "@/lib/ddragon";
-import { createEmptyScores, pickNextQuestion, toPublicQuestion, TOTAL_QUESTIONS } from "@/lib/quiz-engine";
+import { chooseNextQuestion, createEmptyScores, toPublicQuestion, TOTAL_QUESTIONS } from "@/lib/scoring";
 import { getSupabaseAdmin } from "@/lib/supabase-admin";
 
 async function ensureChampionCache(version: string) {
@@ -42,7 +42,10 @@ export async function POST(request: Request) {
     const version = await fetchLatestDDragonVersion();
     await ensureChampionCache(version);
 
-    const firstQuestion = pickNextQuestion([], createEmptyScores());
+    const firstQuestion = chooseNextQuestion({
+      asked: [],
+      scores: createEmptyScores(),
+    });
     if (!firstQuestion) {
       return NextResponse.json({ error: "No quiz question available" }, { status: 500 });
     }
