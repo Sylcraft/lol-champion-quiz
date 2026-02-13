@@ -1,260 +1,232 @@
-export type Role = "Fighter" | "Tank" | "Mage" | "Assassin" | "Support" | "Marksman";
+export type Axis = "audace" | "lead" | "social" | "patience" | "creativity" | "calm" | "ambition" | "empathy";
+
+export const AXES: Axis[] = ["audace", "lead", "social", "patience", "creativity", "calm", "ambition", "empathy"];
 
 export type QuizOption = {
   id: string;
   text: string;
-  scores: Partial<Record<Role, number>>;
+  scores: Partial<Record<Axis, number>>;
 };
 
 export type QuizQuestion = {
   id: string;
   prompt: string;
   options: QuizOption[];
-  focusRoles: Role[];
+  tags: Axis[];
 };
-
-export const ROLES: Role[] = ["Fighter", "Tank", "Mage", "Assassin", "Support", "Marksman"];
 
 export const QUESTIONS: QuizQuestion[] = [
   {
-    id: "q1_lane",
-    prompt: "En game, ton lane ideal ?",
-    focusRoles: ["Fighter", "Tank", "Mage", "Assassin", "Support", "Marksman"],
+    id: "q01_first_impression",
+    prompt: "Quand tu arrives dans un nouveau groupe, ton premier reflexe est...",
+    tags: ["social", "lead", "calm"],
     options: [
-      { id: "top", text: "Top, duel sans pitie", scores: { Fighter: 3, Tank: 2 } },
-      { id: "mid", text: "Mid, playmaking et impact", scores: { Mage: 3, Assassin: 2 } },
-      { id: "bot", text: "Bot, scaling et teamfights", scores: { Marksman: 3, Support: 2 } },
-      { id: "jungle", text: "Jungle, partout sur la map", scores: { Assassin: 2, Fighter: 2, Tank: 1 } },
+      { id: "break_ice", text: "Lancer une blague pour briser la glace", scores: { social: 2, audace: 1 } },
+      { id: "observe", text: "Observer l ambiance avant de parler", scores: { calm: 2, patience: 1 } },
+      { id: "organize", text: "Prendre vite un role utile", scores: { lead: 2, ambition: 1 } },
     ],
   },
   {
-    id: "q2_fight_start",
-    prompt: "Un teamfight demarre. Ton premier reflexe ?",
-    focusRoles: ["Tank", "Assassin", "Mage", "Support"],
+    id: "q02_decision_style",
+    prompt: "Quand tu dois prendre une decision importante...",
+    tags: ["calm", "creativity", "ambition"],
     options: [
-      { id: "engage", text: "J engage, full confiance", scores: { Tank: 3, Fighter: 2 } },
-      { id: "flank", text: "Je flank pour supprimer un carry", scores: { Assassin: 3 } },
-      { id: "poke", text: "Je poke et zone avant d entrer", scores: { Mage: 3 } },
-      { id: "peel", text: "Je protege les miens", scores: { Support: 3, Tank: 1 } },
+      { id: "instinct", text: "Tu suis ton instinct", scores: { audace: 2, creativity: 1 } },
+      { id: "facts", text: "Tu peses les faits calmement", scores: { calm: 2, patience: 1 } },
+      { id: "impact", text: "Tu choisis ce qui te fera progresser", scores: { ambition: 2, lead: 1 } },
+      { id: "human", text: "Tu privilegies l impact humain", scores: { empathy: 2, social: 1 } },
     ],
   },
   {
-    id: "q3_risk",
-    prompt: "Ton rapport au risque ?",
-    focusRoles: ["Assassin", "Mage", "Marksman", "Tank"],
+    id: "q03_conflict",
+    prompt: "Un conflit eclate autour de toi. Tu...",
+    tags: ["empathy", "lead", "audace"],
     options: [
-      { id: "allin", text: "All-in ou rien", scores: { Assassin: 3, Fighter: 1 } },
-      { id: "smart", text: "Calcule, propre, efficace", scores: { Mage: 2, Marksman: 2 } },
-      { id: "safe", text: "Safe et discipline", scores: { Tank: 2, Support: 2 } },
+      { id: "mediate", text: "Joues le mediateur", scores: { empathy: 2, social: 1 } },
+      { id: "frame", text: "Recadres et fixes une direction", scores: { lead: 2, calm: 1 } },
+      { id: "confront", text: "Confrontes directement le probleme", scores: { audace: 2, ambition: 1 } },
     ],
   },
   {
-    id: "q4_power_spike",
-    prompt: "Tu preferes etre fort quand ?",
-    focusRoles: ["Assassin", "Fighter", "Mage", "Marksman", "Tank", "Support"],
+    id: "q04_deadline",
+    prompt: "Face a une deadline tres courte...",
+    tags: ["ambition", "calm", "patience"],
     options: [
-      { id: "early", text: "Tres tot, snowball", scores: { Assassin: 2, Fighter: 2 } },
-      { id: "mid", text: "Mid game, timing objectifs", scores: { Mage: 2, Support: 1, Fighter: 1 } },
-      { id: "late", text: "Late game, je deviens un boss", scores: { Marksman: 3, Tank: 1 } },
+      { id: "sprint", text: "Tu acceleres et improvises", scores: { ambition: 2, audace: 1 } },
+      { id: "plan", text: "Tu fais un mini plan et tu executes", scores: { calm: 2, lead: 1 } },
+      { id: "chunk", text: "Tu decoupes en petites taches", scores: { patience: 2, calm: 1 } },
+      { id: "help", text: "Tu demandes un coup de main utile", scores: { social: 2, empathy: 1 } },
     ],
   },
   {
-    id: "q5_team_role",
-    prompt: "Ton equipe attend quoi de toi ?",
-    focusRoles: ["Tank", "Support", "Mage", "Marksman"],
+    id: "q05_creativity",
+    prompt: "Ton rapport a la creativite ?",
+    tags: ["creativity", "audace", "patience"],
     options: [
-      { id: "frontline", text: "Une frontline solide", scores: { Tank: 3 } },
-      { id: "utility", text: "Vision, peel, setup", scores: { Support: 3 } },
-      { id: "damage", text: "Du gros DPS constant", scores: { Marksman: 3 } },
-      { id: "burst", text: "Du burst et du controle", scores: { Mage: 3 } },
+      { id: "wild", text: "Tu adores les idees hors cadre", scores: { creativity: 2, audace: 1 } },
+      { id: "craft", text: "Tu preferes peaufiner une bonne idee", scores: { creativity: 1, patience: 2 } },
+      { id: "practical", text: "Tu restes pratique avant tout", scores: { calm: 2, ambition: 1 } },
     ],
   },
   {
-    id: "q6_style",
-    prompt: "Ton style mecanique ?",
-    focusRoles: ["Assassin", "Marksman", "Tank", "Support"],
-    options: [
-      { id: "combo", text: "Combos rapides et precis", scores: { Assassin: 2, Mage: 1 } },
-      { id: "kiting", text: "Kiting et spacing", scores: { Marksman: 3 } },
-      { id: "timing", text: "Timing engage/cc", scores: { Tank: 2, Support: 1 } },
-      { id: "macro", text: "Macro et decisions", scores: { Support: 2, Fighter: 1 } },
-    ],
-  },
-  {
-    id: "q7_mental",
-    prompt: "Quand tu es en retard, tu...",
-    focusRoles: ["Support", "Tank", "Assassin", "Mage"],
-    options: [
-      { id: "calm", text: "Reste utile avec vision/utility", scores: { Support: 3 } },
-      { id: "force", text: "Force un play pour revenir", scores: { Assassin: 2, Fighter: 1 } },
-      { id: "scale", text: "Farm et scaling tranquille", scores: { Marksman: 2, Mage: 2 } },
-      { id: "protect", text: "Je joue pour mon carry", scores: { Tank: 2, Support: 1 } },
-    ],
-  },
-  {
-    id: "q8_objective",
-    prompt: "Objectif neutre conteste: ta priorite ?",
-    focusRoles: ["Tank", "Support", "Assassin", "Mage"],
-    options: [
-      { id: "zone", text: "Zoner l acces", scores: { Tank: 2, Mage: 1 } },
-      { id: "pick", text: "Trouver un pick avant", scores: { Assassin: 3 } },
-      { id: "secure", text: "Securiser smite/tempo", scores: { Fighter: 2, Tank: 1 } },
-      { id: "cover", text: "Couvrir la backline", scores: { Support: 2, Marksman: 1 } },
-    ],
-  },
-  {
-    id: "q9_fun",
-    prompt: "Ce qui te fait le plus kiffer ?",
-    focusRoles: ["Assassin", "Mage", "Marksman", "Support"],
-    options: [
-      { id: "outplay", text: "Outplay 1v2", scores: { Assassin: 3 } },
-      { id: "skillshot", text: "Toucher un skillshot clutch", scores: { Mage: 3 } },
-      { id: "penta", text: "Nettoyer un fight en DPS", scores: { Marksman: 3 } },
-      { id: "save", text: "Sauver un allie a 1 HP", scores: { Support: 3 } },
-    ],
-  },
-  {
-    id: "q10_call",
-    prompt: "En vocal, tu es plutot...",
-    focusRoles: ["Tank", "Support", "Fighter", "Mage"],
-    options: [
-      { id: "caller", text: "Shotcaller principal", scores: { Tank: 2, Support: 2 } },
-      { id: "silent", text: "Focus gameplay avant tout", scores: { Marksman: 2, Assassin: 1 } },
-      { id: "setup", text: "Annonce mes timings et setups", scores: { Mage: 2, Fighter: 1 } },
-    ],
-  },
-  {
-    id: "q11_teamfight_pos",
-    prompt: "Ta position favorite en fight ?",
-    focusRoles: ["Marksman", "Mage", "Tank", "Assassin"],
-    options: [
-      { id: "front", text: "Frontline", scores: { Tank: 3, Fighter: 1 } },
-      { id: "back", text: "Backline safe", scores: { Marksman: 3 } },
-      { id: "side", text: "Sur le cote pour angle", scores: { Mage: 2, Assassin: 1 } },
-      { id: "behind", text: "Derriere eux pour flank", scores: { Assassin: 3 } },
-    ],
-  },
-  {
-    id: "q12_mood",
-    prompt: "Ton mood en ranked ?",
-    focusRoles: ["Support", "Fighter", "Mage", "Assassin"],
-    options: [
-      { id: "leader", text: "On gagne ensemble", scores: { Support: 2, Tank: 1 } },
-      { id: "carry", text: "Je dois carry cette game", scores: { Fighter: 2, Assassin: 2 } },
-      { id: "brain", text: "Je joue la map intelligemment", scores: { Mage: 2, Support: 1 } },
-      { id: "tempo", text: "Je joue le tempo des objectifs", scores: { Fighter: 1, Tank: 1, Marksman: 1 } },
-    ],
-  },
-  {
-    id: "q13_conflict",
-    prompt: "Quand un conflit apparait dans un groupe, tu fais quoi ?",
-    focusRoles: ["Support", "Tank", "Mage", "Assassin"],
-    options: [
-      { id: "mediate", text: "Je calme le jeu et je reconnecte tout le monde", scores: { Support: 3 } },
-      { id: "decide", text: "Je tranche vite pour eviter de perdre du temps", scores: { Tank: 2, Fighter: 1 } },
-      { id: "analyze", text: "Je cherche la cause exacte du probleme", scores: { Mage: 3 } },
-      { id: "shock", text: "Je provoque pour faire reagir", scores: { Assassin: 2, Fighter: 1 } },
-    ],
-  },
-  {
-    id: "q14_weekend",
-    prompt: "Ton weekend ideal ressemble a quoi ?",
-    focusRoles: ["Fighter", "Mage", "Support", "Marksman"],
-    options: [
-      { id: "adventure", text: "Sortie improvisee et energie a fond", scores: { Fighter: 3, Assassin: 1 } },
-      { id: "cozy", text: "Moments calmes avec mes proches", scores: { Support: 3 } },
-      { id: "learn", text: "Explorer une passion ou apprendre quelque chose", scores: { Mage: 3 } },
-      { id: "reset", text: "Recharge complete pour etre en forme lundi", scores: { Marksman: 2, Tank: 1 } },
-    ],
-  },
-  {
-    id: "q15_pressure",
+    id: "q06_pressure",
     prompt: "Sous pression, tu deviens plutot...",
-    focusRoles: ["Tank", "Assassin", "Mage", "Marksman"],
+    tags: ["calm", "lead", "social"],
     options: [
-      { id: "cold", text: "Froid et ultra concentre", scores: { Assassin: 2, Marksman: 1 } },
-      { id: "leader", text: "Directif et rassurant", scores: { Tank: 2, Support: 1 } },
-      { id: "method", text: "Methodique, etape par etape", scores: { Mage: 2, Marksman: 1 } },
-      { id: "heart", text: "Empathique, je soutiens le groupe", scores: { Support: 2, Fighter: 1 } },
+      { id: "ice", text: "Froid et precis", scores: { calm: 2, patience: 1 } },
+      { id: "captain", text: "Directif et rassurant", scores: { lead: 2, empathy: 1 } },
+      { id: "spark", text: "Energique et motive", scores: { social: 2, ambition: 1 } },
     ],
   },
   {
-    id: "q16_choice",
-    prompt: "Pour prendre une decision importante, tu suis surtout...",
-    focusRoles: ["Mage", "Support", "Fighter", "Assassin"],
+    id: "q07_risk",
+    prompt: "Ton attitude face au risque ?",
+    tags: ["audace", "patience", "calm"],
     options: [
-      { id: "logic", text: "Les faits et la logique", scores: { Mage: 3 } },
-      { id: "values", text: "Mes valeurs et l impact humain", scores: { Support: 3 } },
-      { id: "instinct", text: "Mon instinct immediat", scores: { Assassin: 2, Fighter: 1 } },
-      { id: "experience", text: "Ce qui a deja marche avant", scores: { Tank: 2, Marksman: 1 } },
+      { id: "all_in", text: "Tu tentes ta chance sans hesiter", scores: { audace: 2, ambition: 1 } },
+      { id: "measured", text: "Tu prends des risques calcules", scores: { calm: 2, audace: 1 } },
+      { id: "safe", text: "Tu privilegies la securite", scores: { patience: 2, calm: 1 } },
     ],
   },
   {
-    id: "q17_group_role",
-    prompt: "Dans un projet d equipe, ton role naturel ?",
-    focusRoles: ["Support", "Tank", "Mage", "Marksman"],
+    id: "q08_team_role",
+    prompt: "Dans un projet d equipe, tu es le plus souvent...",
+    tags: ["lead", "social", "creativity"],
     options: [
-      { id: "organizer", text: "Coordonner les gens et garder le cap", scores: { Support: 2, Tank: 1 } },
-      { id: "executor", text: "Executer vite et proprement", scores: { Marksman: 3 } },
-      { id: "strategist", text: "Designer la strategie globale", scores: { Mage: 3 } },
-      { id: "driver", text: "Pousser le groupe vers l action", scores: { Fighter: 2, Tank: 1 } },
+      { id: "pilot", text: "Le pilote qui donne la direction", scores: { lead: 2, ambition: 1 } },
+      { id: "glue", text: "Le lien entre les personnes", scores: { social: 2, empathy: 1 } },
+      { id: "inventor", text: "Le cerveau d idees", scores: { creativity: 2, audace: 1 } },
+      { id: "finisher", text: "Celui qui termine proprement", scores: { patience: 2, calm: 1 } },
     ],
   },
   {
-    id: "q18_surprise",
-    prompt: "Face a un changement inattendu, tu...",
-    focusRoles: ["Assassin", "Tank", "Mage", "Support"],
+    id: "q09_motivation",
+    prompt: "Ce qui te motive le plus au quotidien ?",
+    tags: ["ambition", "empathy", "creativity"],
     options: [
-      { id: "adapt", text: "Je pivote instantanement", scores: { Assassin: 2, Fighter: 1 } },
-      { id: "stabilize", text: "Je securise la situation avant tout", scores: { Tank: 3 } },
-      { id: "model", text: "Je fais un plan B structure", scores: { Mage: 3 } },
-      { id: "supportive", text: "Je m assure que personne ne decroche", scores: { Support: 3 } },
+      { id: "win", text: "Atteindre des objectifs eleves", scores: { ambition: 2, lead: 1 } },
+      { id: "meaning", text: "Aider et avoir de l impact", scores: { empathy: 2, social: 1 } },
+      { id: "build", text: "Creer quelque chose de nouveau", scores: { creativity: 2, audace: 1 } },
     ],
   },
   {
-    id: "q19_success",
-    prompt: "Ta definition d une vraie reussite ?",
-    focusRoles: ["Marksman", "Support", "Mage", "Fighter"],
+    id: "q10_change",
+    prompt: "Un changement de plan de derniere minute te fait...",
+    tags: ["calm", "patience", "audace"],
     options: [
-      { id: "mastery", text: "La maitrise technique", scores: { Marksman: 2, Mage: 1 } },
-      { id: "impact", text: "Avoir un impact concret sur les autres", scores: { Support: 3 } },
-      { id: "vision", text: "Construire une vision long terme", scores: { Mage: 2, Tank: 1 } },
-      { id: "win", text: "Atteindre l objectif coute que coute", scores: { Fighter: 2, Assassin: 1 } },
+      { id: "excited", text: "Sourire, tu adores pivoter vite", scores: { audace: 2, creativity: 1 } },
+      { id: "steady", text: "Rester calme et replanifier", scores: { calm: 2, lead: 1 } },
+      { id: "annoyed", text: "Raler un peu puis t adapter", scores: { patience: 1, ambition: 1 } },
     ],
   },
   {
-    id: "q20_energy",
+    id: "q11_energy_source",
     prompt: "Ce qui recharge le plus ton energie ?",
-    focusRoles: ["Support", "Assassin", "Mage", "Tank"],
+    tags: ["social", "calm", "creativity"],
     options: [
-      { id: "people", text: "Discuter avec des gens que j apprecie", scores: { Support: 3 } },
-      { id: "solo", text: "Un moment solo intense", scores: { Assassin: 2, Marksman: 1 } },
-      { id: "curiosity", text: "Lire, apprendre, comprendre", scores: { Mage: 3 } },
-      { id: "routine", text: "Une routine stable et saine", scores: { Tank: 2, Fighter: 1 } },
+      { id: "people", text: "Les moments avec les autres", scores: { social: 2, empathy: 1 } },
+      { id: "solo", text: "Du temps seul, au calme", scores: { calm: 2, patience: 1 } },
+      { id: "projects", text: "Un nouveau projet excitant", scores: { creativity: 2, ambition: 1 } },
+      { id: "challenge", text: "Un challenge qui pique", scores: { audace: 2, ambition: 1 } },
     ],
   },
   {
-    id: "q21_detail_vs_big",
+    id: "q12_feedback",
+    prompt: "Quand on te fait un feedback critique...",
+    tags: ["calm", "ambition", "empathy"],
+    options: [
+      { id: "reflect", text: "Tu ecoutes puis tu ajustes", scores: { calm: 2, ambition: 1 } },
+      { id: "debate", text: "Tu debates si tu n es pas d accord", scores: { lead: 1, audace: 1 } },
+      { id: "take_hard", text: "Tu le prends a coeur", scores: { empathy: 2, patience: 1 } },
+    ],
+  },
+  {
+    id: "q13_weekend",
+    prompt: "Ton week-end ideal ?",
+    tags: ["social", "calm", "ambition"],
+    options: [
+      { id: "friends", text: "Sortie entre amis", scores: { social: 2, audace: 1 } },
+      { id: "cocoon", text: "Repos et ambiance chill", scores: { calm: 2, patience: 1 } },
+      { id: "side_project", text: "Avancer sur un projet perso", scores: { ambition: 2, creativity: 1 } },
+    ],
+  },
+  {
+    id: "q14_fail",
+    prompt: "Quand tu echoues sur quelque chose...",
+    tags: ["patience", "ambition", "calm"],
+    options: [
+      { id: "retry_fast", text: "Tu retentes tout de suite", scores: { ambition: 2, audace: 1 } },
+      { id: "analyze", text: "Tu analyses avant de recommencer", scores: { calm: 2, patience: 1 } },
+      { id: "step_back", text: "Tu prends du recul puis tu reviens", scores: { patience: 2, calm: 1 } },
+    ],
+  },
+  {
+    id: "q15_group_decision",
+    prompt: "Si un groupe n arrive pas a choisir...",
+    tags: ["lead", "empathy", "social"],
+    options: [
+      { id: "decide_now", text: "Tu proposes une decision claire", scores: { lead: 2, ambition: 1 } },
+      { id: "collect", text: "Tu fais parler tout le monde", scores: { empathy: 2, social: 1 } },
+      { id: "test", text: "Tu proposes de tester rapidement", scores: { audace: 2, creativity: 1 } },
+    ],
+  },
+  {
+    id: "q16_attention",
     prompt: "Tu preferes travailler sur...",
-    focusRoles: ["Marksman", "Mage", "Fighter", "Support"],
+    tags: ["patience", "creativity", "ambition"],
     options: [
-      { id: "details", text: "Les details qui font la difference", scores: { Marksman: 3 } },
-      { id: "big_picture", text: "La vision d ensemble", scores: { Mage: 2, Tank: 1 } },
-      { id: "delivery", text: "La production rapide de resultat", scores: { Fighter: 2, Assassin: 1 } },
-      { id: "alignment", text: "La cohesion entre les personnes", scores: { Support: 3 } },
+      { id: "details", text: "Les details qui font la qualite", scores: { patience: 2, calm: 1 } },
+      { id: "big_picture", text: "La vision d ensemble", scores: { creativity: 2, lead: 1 } },
+      { id: "results", text: "Le resultat concret rapidement", scores: { ambition: 2, audace: 1 } },
     ],
   },
   {
-    id: "q22_signature",
-    prompt: "Ton trait de personnalite le plus fort ?",
-    focusRoles: ["Tank", "Support", "Assassin", "Mage", "Marksman", "Fighter"],
+    id: "q17_values",
+    prompt: "Le trait que tu valorises le plus chez les autres ?",
+    tags: ["empathy", "calm", "ambition"],
     options: [
-      { id: "resilience", text: "La resilience", scores: { Tank: 3 } },
-      { id: "empathy", text: "L empathie", scores: { Support: 3 } },
-      { id: "audacity", text: "L audace", scores: { Assassin: 2, Fighter: 1 } },
-      { id: "clarity", text: "La clarte d esprit", scores: { Mage: 2, Marksman: 1 } },
+      { id: "kind", text: "La bienveillance", scores: { empathy: 2, social: 1 } },
+      { id: "reliable", text: "La fiabilite", scores: { calm: 2, patience: 1 } },
+      { id: "drive", text: "La determination", scores: { ambition: 2, lead: 1 } },
+      { id: "bold", text: "Le courage", scores: { audace: 2, ambition: 1 } },
+    ],
+  },
+  {
+    id: "q18_communication",
+    prompt: "Ton style de communication naturel ?",
+    tags: ["social", "lead", "calm"],
+    options: [
+      { id: "direct", text: "Direct et concis", scores: { lead: 2, calm: 1 } },
+      { id: "warm", text: "Chaleureux et attentionne", scores: { social: 2, empathy: 1 } },
+      { id: "measured", text: "Pose et nuance", scores: { calm: 2, patience: 1 } },
+    ],
+  },
+  {
+    id: "q19_opportunity",
+    prompt: "Une opportunite inattendue se presente. Tu...",
+    tags: ["audace", "ambition", "calm"],
+    options: [
+      { id: "jump", text: "Sautes dessus", scores: { audace: 2, ambition: 1 } },
+      { id: "verify", text: "Verifies vite les risques", scores: { calm: 2, patience: 1 } },
+      { id: "consult", text: "Demandes un avis de confiance", scores: { social: 1, empathy: 2 } },
+    ],
+  },
+  {
+    id: "q20_legacy",
+    prompt: "Tu aimerais etre reconnu pour...",
+    tags: ["ambition", "empathy", "creativity"],
+    options: [
+      { id: "achievements", text: "Tes accomplissements", scores: { ambition: 2, lead: 1 } },
+      { id: "people", text: "L impact positif sur les gens", scores: { empathy: 2, social: 1 } },
+      { id: "ideas", text: "Tes idees originales", scores: { creativity: 2, audace: 1 } },
     ],
   },
 ];
 
-export const QUESTION_BY_ID = new Map(QUESTIONS.map((q) => [q.id, q]));
+const ids = QUESTIONS.map((question) => question.id);
+const uniqueIds = new Set(ids);
+if (ids.length !== uniqueIds.size) {
+  throw new Error("Duplicate question IDs detected in QUESTIONS");
+}
+
+export const QUESTION_BY_ID = new Map(QUESTIONS.map((question) => [question.id, question]));
