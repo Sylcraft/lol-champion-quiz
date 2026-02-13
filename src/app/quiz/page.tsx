@@ -28,13 +28,30 @@ type AnswerResponse =
       sessionId: string;
       progress: { answered: number; total: number };
       result: {
-        championId: string;
-        name: string;
-        title: string;
-        blurb: string;
         version: string;
-        imageUrl: string;
-        reason: string;
+        archetype: {
+          slug: string;
+          name: string;
+          description: string;
+          why: [string, string, string];
+        };
+        dominantAxes: [string, string];
+        weakestAxis: string;
+        summary: string;
+        strengths: string;
+        weakness: string;
+        bullets: [string, string, string];
+        mainChampion: {
+          id: string;
+          name: string;
+          title: string;
+          blurb: string;
+          imageUrl: string;
+        };
+        alternatives: [
+          { id: string; name: string; title: string; blurb: string; imageUrl: string },
+          { id: string; name: string; title: string; blurb: string; imageUrl: string },
+        ];
       };
     };
 
@@ -99,7 +116,13 @@ export default function QuizPage() {
       if (payload.done) {
         localStorage.setItem("lol_quiz_result", JSON.stringify(payload));
         localStorage.removeItem("lol_quiz_bootstrap");
-        router.push(`/result?sessionId=${payload.sessionId}`);
+        const params = new URLSearchParams({
+          sessionId: payload.sessionId,
+          champion: payload.result.mainChampion.id,
+          arch: payload.result.archetype.slug,
+          version: payload.result.version,
+        });
+        router.push(`/result?${params.toString()}`);
         return;
       }
 
